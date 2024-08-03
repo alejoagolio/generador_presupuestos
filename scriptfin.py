@@ -134,18 +134,25 @@ def main():
         submit_button = st.form_submit_button(label='Agregar Producto')
 
         if submit_button:
-            precio, codigo = obtener_precio(diametro_externo, diametro_interno, longitud, ratio_dolar)
-            if codigo is None or precio is None:
-                st.error("No se pudieron obtener los valores calculados.")
+            if diametro_externo <= 0 or diametro_interno <= 0 or longitud <= 0 or cantidad <= 0:
+                st.error("Por favor, complete todos los campos correctamente.")
             else:
-                productos.append((codigo, cantidad, precio))
-                st.success(f"Producto agregado: {codigo} - Cantidad: {cantidad} - Precio: {precio:.2f}")
+                precio, codigo = obtener_precio(diametro_externo, diametro_interno, longitud, ratio_dolar)
+                if codigo is None or precio is None:
+                    st.error("No se pudieron obtener los valores calculados.")
+                else:
+                    productos.append((codigo, cantidad, precio))
+                    st.success(f"Producto agregado: {codigo} - Cantidad: {cantidad} - Precio: {precio:.2f}")
 
     if st.button("Generar Presupuesto"):
         if productos:
             generar_presupuesto(productos, "presupuesto")
+            st.success("Presupuesto generado exitosamente.")
         else:
             st.error("No hay productos para generar el presupuesto.")
+
+if __name__ == "__main__":
+    main()
     
 
 if __name__ == "__main__":
